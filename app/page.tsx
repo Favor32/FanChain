@@ -1,65 +1,52 @@
-import Image from "next/image";
-
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+  <div className="flex flex-col items-center text-center pt-12 pb-20">
+        <div className="floating-ball mb-8">
+          <svg width="80" height="80" viewBox="0 0 80 80" className="spinning-ball">
+            <circle cx="40" cy="40" r="38" fill="none" stroke="var(--gold)" strokeWidth="1.5" />
+            <path
+              d="M40 12 L52 22 L48 38 L32 38 L28 22 Z M40 12 L40 4 M52 22 L66 20 M48 38 L58 50 M32 38 L22 50 M28 22 L14 20"
+              fill="none"
+              stroke="var(--gold)"
+              strokeWidth="1.2"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </svg>
         </div>
-      </main>
-    </div>
+        <h1
+          className="text-6xl sm:text-7xl mb-6"
+          style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
+        >
+          Fanchain
+        </h1>
+        <p className="text-lg mb-10 max-w-xl" style={{ color: "var(--text-muted)" }}>
+          Every goal. Every card. Yours, the instant it happens — a verified,
+          on-chain claim to the moment you watched, sent straight to your wallet.
+        </p>
+        
+          href="/live"
+          className="inline-block px-8 py-3 rounded-lg font-medium"
+          style={{ backgroundColor: "var(--gold)", color: "var(--bg-deep)" }}
+        >
+          Enter the Live Room
+        </a>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-24">
+        <div>
+          <p style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }} className="text-2xl mb-2">01</p>
+          <p style={{ color: "var(--text-primary)" }} className="mb-1 font-medium">Connect your wallet</p>
+          <p style={{ color: "var(--text-muted)" }} className="text-sm">Link Phantom in a couple taps. That's the only setup.</p>
+        </div>
+        <div>
+          <p style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }} className="text-2xl mb-2">02</p>
+          <p style={{ color: "var(--text-primary)" }} className="mb-1 font-medium">Watch it happen</p>
+          <p style={{ color: "var(--text-muted)" }} className="text-sm">Goals and cards appear the second they're confirmed on the pitch.</p>
+        </div>
+        <div>
+          <p style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }} className="text-2xl mb-2">03</p>
+          <p style={{ color: "var(--text-primary)" }} className="mb-1 font-medium">Claim it</p>
+          <p style={{ color: "var(--text-muted)" }} className="text-sm">One tap mints it to your wallet. It's yours, permanently.</p>
+        </div>
+      </div>
+    </main>
   );
 }

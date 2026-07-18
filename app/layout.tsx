@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import "./globals.css";
+import WalletProvider from "./WalletProvider";
+
+import { Playfair_Display, Inter } from "next/font/google";
+
+const playfair = Playfair_Display({
+  variable: "--font-display",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
@@ -25,9 +28,29 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${playfair.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+  <WalletProvider>
+    <nav
+      className="flex items-center justify-between px-6 py-4 border-b"
+      style={{ borderColor: "var(--border)" }}
+    >
+      
+      <a href="/"
+        className="text-xl tracking-widest"
+        style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }}
+      >
+        FANCHAIN
+      </a>
+      <div className="flex gap-6 text-sm" style={{ color: "var(--text-muted)" }}>
+        <a href="/live" className="hover:underline">Live Room</a>
+        <a href="/how-it-works" className="hover:underline">How It Works</a>
+      </div>
+    </nav>
+    {children}
+  </WalletProvider>
+</body>
     </html>
   );
 }

@@ -1,0 +1,5 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="500" fill="#1a1a1a"/>
+  <circle cx="250" cy="200" r="80" fill="#ffffff"/>
+  <text x="250" y="350" font-family="Arial, sans-serif" font-size="48" fill="#ffffff" text-anchor="middle" font-weight="bold">GOAL</text>
+</svg>

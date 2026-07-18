@@ -1,26 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-deep: #0B1912;
+  --surface: #132A1F;
+  --border: #254234;
+  --gold: #C9CFD6;
+  --pitch-green: #1F6B4A;
+  --text-primary: #F1F3F0;
+  --text-muted: #8DA396;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+}
+@keyframes spin-ball {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float-ball {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-16px); }
+}
+
+.floating-ball {
+  animation: float-ball 3.5s ease-in-out infinite;
+}
+
+.spinning-ball {
+  animation: spin-ball 6s linear infinite;
 }

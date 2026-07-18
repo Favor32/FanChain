@@ -1,0 +1,5 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="500" fill="#1a1a1a"/>
+  <rect x="190" y="140" width="120" height="170" rx="8" fill="#f4d35e"/>
+  <text x="250" y="350" font-family="Arial, sans-serif" font-size="36" fill="#ffffff" text-anchor="middle" font-weight="bold">YELLOW CARD</text>
+</svg>
