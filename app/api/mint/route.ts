@@ -12,7 +12,7 @@ import { publicKey as toUmiPublicKey } from "@metaplex-foundation/umi";
 const umi = createUmi("https://api.devnet.solana.com");
 
 const walletKeypairData = JSON.parse(
-  fs.readFileSync("dev-wallet.json", "utf-8")
+  process.env.DEV_WALLET_SECRET_KEY as string
 );
 const umiKeypair = umi.eddsa.createKeypairFromSecretKey(
   new Uint8Array(walletKeypairData)
