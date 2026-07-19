@@ -32,7 +32,7 @@ export default function Home() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-8">
         <div>
           <p style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }} className="text-2xl mb-2">01</p>
           <p style={{ color: "var(--text-primary)" }} className="mb-1 font-medium">Connect your wallet</p>
