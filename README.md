@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fanchain
 
-## Getting Started
+Claim real World Cup moments as on-chain collectibles, the instant they happen.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Fanchain listens to a live, verified World Cup data feed. When a goal, red
+card, or yellow card is confirmed, fans watching can claim that moment as a
+real NFT — minted directly into their connected Solana wallet, not a
+screenshot or a highlight clip.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Why Solana
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Solana is structurally required in two separate ways:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Data access is on-chain.** To receive live match data from TxODDS, an
+   application must hold a verified on-chain subscription — a real Solana
+   transaction, not just an API key request. This project's backend
+   subscribes and activates its data access this way.
+2. **Ownership is on-chain.** Claimed moments are minted as real NFTs
+   directly into the fan's wallet, giving permanent, verifiable ownership
+   rather than a database record.
 
-## Learn More
+## Architecture
+- **Backend (`app/api/txline/`)**: authenticates with TxODDS (JWT + long-lived
+  API token, obtained via an on-chain subscribe/activate flow using Anchor),
+  fetches fixtures, and relays a live Server-Sent Events stream of match
+  scores to the frontend.
+- **Minting (`app/api/mint/`)**: uses Metaplex/Umi to mint an NFT representing
+  a claimed moment directly into the fan's connected wallet.
+- **Frontend (`app/`)**: a live dashboard (`/live`) that connects to the
+  scores stream, renders claimable moment cards, and handles wallet connection
+  via Solana Wallet Adapter.
 
-To learn more about Next.js, take a look at the following resources:
+## Tech stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js (App Router)
+- Solana (devnet), Anchor
+- Metaplex / Umi (NFT minting)
+- TxODDS TxLINE API (live football data)
+- Tailwind CSS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Setup
 
-## Deploy on Vercel
+1. Clone the repo, `npm install`
+2. Set the required environment variables (see `.env.local.example` if
+   provided, or the list below)
+3. `npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Required environment variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `NEXT_PUBLIC_SOLANA_NETWORK`
+- `NEXT_PUBLIC_SOLANA_RPC`
+- `TXLINE_API_ORIGIN`
+- `TXLINE_PROGRAM_ID`
+- `TXLINE_API_TOKEN`
+- `DEV_WALLET_SECRET_KEY`
+
+## Notes
+
+- Currently running on Solana Devnet.
+- A "Simulate a Moment" button is included on the Live Room page to
+  demonstrate the claim flow without waiting for a live match event.
+
