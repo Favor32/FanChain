@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+dev-wallet.json
+api-token.txt
+subscription-tx.txt

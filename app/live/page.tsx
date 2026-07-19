@@ -15,14 +15,15 @@ function getMomentType(event: any): string | null {
   return null;
 }
 
-export default function Home() {
+export default function LivePage() {
   const [events, setEvents] = useState<any[]>([]);
   const [connectionStatus, setConnectionStatus] = useState("connecting");
   const { publicKey } = useWallet();
   const [claimedIds, setClaimedIds] = useState<Set<number>>(new Set());
   const [claiming, setClaiming] = useState<number | null>(null);
   const [fixture, setFixture] = useState<any>(null);
-
+  const [mintResult, setMintResult] = useState<{ index: number; mintAddress: string } | null>(null); 
+ const [otherFixtures, setOtherFixtures] = useState<any[]>([]);
   useEffect(() => {
     const eventSource = new EventSource(`/api/txline/scores?fixtureId=${FIXTURE_ID}`);
 
@@ -34,12 +35,12 @@ export default function Home() {
       const data = JSON.parse(event.data);
 
       if (data.Ts && !data.fixtureId) {
-        return; // heartbeat, ignore
+        return;
       }
 
       const momentType = getMomentType(data);
       if (!momentType) {
-        return; // not a moment we care about, ignore
+        return;
       }
 
       console.log("New moment:", momentType, data);
@@ -55,12 +56,17 @@ export default function Home() {
     };
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     fetch("/api/txline/fixtures")
       .then((res) => res.json())
       .then((fixtures) => {
         const match = fixtures.find((f: any) => f.FixtureId === FIXTURE_ID);
         if (match) setFixture(match);
+        setOtherFixtures(
+      fixtures
+    .filter((f: any) => f.FixtureId !== FIXTURE_ID)
+    .slice(0, 6)
+);
       })
       .catch((err) => console.error("Failed to load fixture info:", err));
   }, []);
@@ -93,9 +99,9 @@ export default function Home() {
 
       const result = await response.json();
 
-      if (result.success) {
+     if (result.success) {
         setClaimedIds((prev) => new Set(prev).add(index));
-        alert(`Claimed! NFT minted: ${result.mintAddress}`);
+        setMintResult({ index, mintAddress: result.mintAddress });
       } else {
         alert("Claim failed: " + result.error);
       }
@@ -124,10 +130,10 @@ export default function Home() {
     <main className="min-h-screen px-6 py-10 max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <h1
-          className="text-3xl tracking-wide"
+          className="text-3xl italic"
           style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }}
         >
-          Claimed
+          Live Room
         </h1>
         <WalletMultiButton />
       </div>
@@ -139,11 +145,11 @@ export default function Home() {
         >
           <div>
             <p
-          className="text-sm mb-2 italic"
-          style={{ fontFamily: "var(--font-display)", color: "var(--pitch-green)" }}
-        >
-          Live now
-        </p>
+              className="text-sm mb-2 italic"
+              style={{ fontFamily: "var(--font-display)", color: "var(--pitch-green)" }}
+            >
+              Live now
+            </p>
             <p
               className="text-2xl"
               style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
@@ -161,27 +167,24 @@ export default function Home() {
 
       <button
         onClick={injectTestEvent}
-        className="mb-8 text-xs px-3 py-1 rounded border"
-        style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}
+        className="mb-8 text-xs px-4 py-2 rounded-lg border italic"
+        style={{ borderColor: "var(--accent-bright)", color: "var(--accent-bright)", fontFamily: "var(--font-display)" }}
       >
-        Inject Test Goal (dev only)
+        Simulate a Moment
       </button>
 
-      <p
-        className="mb-8 text-sm uppercase tracking-widest"
-        style={{ color: "var(--text-muted)" }}
-      >
-        Status: {connectionStatus}
+      <p className="mb-8 text-sm" style={{ color: "var(--text-muted)" }}>
+        {connectionStatus === "connected" ? "Connected to live match feed" : "Connecting..."}
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
         {events.length === 0 && (
           <div
             className="col-span-full rounded-xl border border-dashed p-12 text-center"
             style={{ borderColor: "var(--border)" }}
           >
             <p
-              className="text-lg mb-2"
+              className="text-lg mb-2 italic"
               style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
             >
               No moments yet
@@ -201,20 +204,25 @@ export default function Home() {
           };
           const imageSrc = imageMap[event.momentType] || "/moments/generic.svg";
 
-          return (
+         return (
             <div
               key={index}
-              className="rounded-xl overflow-hidden border transition-all"
+              className="relative rounded-2xl overflow-hidden transition-transform hover:-translate-y-2"
               style={{
-                backgroundColor: "var(--surface)",
-                borderColor: isClaimed ? "var(--gold)" : "var(--border)",
-                boxShadow: isClaimed ? "0 0 20px rgba(201, 169, 97, 0.25)" : "none",
+                border: isClaimed ? "2px solid var(--gold)" : "1px solid var(--border)",
+                boxShadow: isClaimed
+                  ? "0 0 30px rgba(0, 229, 255, 0.35)"
+                  : "0 4px 20px rgba(0,0,0,0.3)",
               }}
             >
-              <img src={imageSrc} alt={event.momentType} className="w-full h-40 object-cover" />
-              <div className="p-4">
+              <img src={imageSrc} alt={event.momentType} className="w-full h-72 object-cover" />
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(to top, var(--bg-deep) 10%, transparent 55%)" }}
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
                 <p
-                  className="text-sm tracking-widest mb-3"
+                  className="text-2xl italic mb-4"
                   style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
                 >
                   {event.momentType?.toUpperCase()}
@@ -222,7 +230,7 @@ export default function Home() {
                 <button
                   onClick={() => handleClaim(event, index)}
                   disabled={isClaimed || isClaiming}
-                  className="w-full py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="w-full py-3 rounded-xl text-sm font-semibold transition-colors"
                   style={{
                     backgroundColor: isClaimed ? "transparent" : "var(--gold)",
                     color: isClaimed ? "var(--gold)" : "var(--bg-deep)",
@@ -235,9 +243,73 @@ export default function Home() {
                 </button>
               </div>
             </div>
+          
           );
         })}
       </div>
+      {mintResult && (
+        <div
+          className="fixed bottom-6 right-6 rounded-xl border p-4 max-w-sm"
+          style={{ backgroundColor: "var(--surface)", borderColor: "var(--accent-bright)" }}
+        >
+          <p className="text-sm mb-1" style={{ color: "var(--accent-bright)" }}>
+            Moment claimed
+          </p>
+          <p className="text-xs mb-3 break-all" style={{ color: "var(--text-muted)" }}>
+            {mintResult.mintAddress}
+          </p>
+          <div className="flex gap-3">
+            <a
+              href={`https://explorer.solana.com/address/${mintResult.mintAddress}?cluster=devnet`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs underline"
+              style={{ color: "var(--accent-bright)" }}
+            >
+              View on Explorer
+            </a>
+            <button
+              onClick={() => setMintResult(null)}
+              className="text-xs underline"
+              style={{ color: "var(--text-muted)" }}
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+      {otherFixtures.length > 0 && (
+        <div className="mt-20">
+          <h2
+            className="text-lg mb-6 italic"
+            style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
+          >
+            More Fixtures
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {otherFixtures.map((f) => (
+              <div
+                key={f.FixtureId}
+                className="rounded-xl border p-5 flex justify-between items-center"
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+              >
+                <p className="text-base" style={{ color: "var(--text-primary)" }}>
+                  {f.Participant1}{" "}
+                  <span style={{ color: "var(--text-muted)" }} className="mx-1">vs</span>{" "}
+                  {f.Participant2}
+                </p>
+                <p
+                  className="text-xs px-3 py-1 rounded-full"
+                  style={{ backgroundColor: "var(--bg-deep)", color: "var(--gold)" }}
+                >
+                  World Cup
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
     </main>
   );
 }

@@ -44,9 +44,11 @@ export default function RootLayout({
         FANCHAIN
       </a>
       <div className="flex gap-6 text-sm" style={{ color: "var(--text-muted)" }}>
-        <a href="/live" className="hover:underline">Live Room</a>
-        <a href="/how-it-works" className="hover:underline">How It Works</a>
-      </div>
+  <a href="/" className="hover:underline">Home</a>
+  <a href="/live" className="hover:underline">Live Room</a>
+  <a href="/how-it-works" className="hover:underline">How It Works</a>
+  <a href="/docs" className="hover:underline">Docs</a>
+</div>
     </nav>
     {children}
   </WalletProvider>
