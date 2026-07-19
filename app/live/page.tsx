@@ -82,8 +82,10 @@ useEffect(() => {
     try {
       const soccer = event.dataSoccer;
       const teamName =
-        event.participant1IsHome !== undefined
-          ? `Team ${event.participant1Id}`
+        fixture && event.participant1Id === fixture.Participant1Id
+          ? fixture.Participant1
+          : fixture && event.participant1Id === fixture.Participant2Id
+          ? fixture.Participant2
           : "Team";
 
       const response = await fetch("/api/mint", {

@@ -25,13 +25,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { recipientWallet, momentType, teamName, minute } = body;
 
-    const imageMap: Record<string, string> = {
-      goal: "/moments/goal.svg",
-      redcard: "/moments/redcard.svg",
-      yellowcard: "/moments/yellowcard.svg",
-    };
-    const imagePath = imageMap[momentType] || "/moments/generic.svg";
-    const imageUrl = `http://localhost:3000${imagePath}`;
+   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const imageUrl = `${baseUrl}/api/moment-image?type=${momentType}&team=${encodeURIComponent(teamName)}&minute=${minute}`;
 
     const nftName = `${teamName} - ${momentType.toUpperCase()} (${minute}')`;
 
