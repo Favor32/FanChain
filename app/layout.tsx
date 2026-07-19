@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
   <WalletProvider>
     <nav
-      className="flex items-center justify-between px-6 py-4 border-b"
+      className="flex items-center justify-between px-6 py-4 "
       style={{ borderColor: "var(--border)" }}
     >
       
