@@ -23,7 +23,8 @@ export default function LivePage() {
   const [claiming, setClaiming] = useState<number | null>(null);
   const [fixture, setFixture] = useState<any>(null);
   const [mintResult, setMintResult] = useState<{ index: number; mintAddress: string } | null>(null); 
- const [otherFixtures, setOtherFixtures] = useState<any[]>([]);
+ const [showFullScreenMint, setShowFullScreenMint] = useState(false);
+  const [otherFixtures, setOtherFixtures] = useState<any[]>([]);
   useEffect(() => {
     const eventSource = new EventSource(`/api/txline/scores?fixtureId=${FIXTURE_ID}`);
 
@@ -104,6 +105,7 @@ useEffect(() => {
      if (result.success) {
         setClaimedIds((prev) => new Set(prev).add(index));
         setMintResult({ index, mintAddress: result.mintAddress });
+        setShowFullScreenMint(true);
       } else {
         alert("Claim failed: " + result.error);
       }
@@ -256,6 +258,58 @@ const imageSrc = `/api/moment-image?type=${event.momentType}&team=${encodeURICom
           );
         })}
       </div>
+      {showFullScreenMint && mintResult && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-6"
+          style={{ backgroundColor: "rgba(10, 10, 15, 0.95)" }}
+        >
+          <div className="text-center max-w-md">
+            <p
+              className="text-sm uppercase tracking-widest mb-4"
+              style={{ color: "var(--gold)" }}
+            >
+              Moment Claimed
+            </p>
+            <img
+              src={events[mintResult.index] ? `/api/moment-image?type=${events[mintResult.index].momentType}&team=${encodeURIComponent(
+                fixture && events[mintResult.index].participant1Id === fixture.Participant1Id
+                  ? fixture.Participant1
+                  : fixture?.Participant2 || "Team"
+              )}&minute=${events[mintResult.index].dataSoccer?.Minutes || 0}` : ""}
+              alt="Claimed moment"
+              className="w-64 h-64 mx-auto rounded-2xl mb-6"
+              style={{ border: "2px solid var(--gold)", boxShadow: "0 0 40px rgba(0, 229, 255, 0.4)" }}
+            />
+            <p
+              className="text-2xl italic mb-2"
+              style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}
+            >
+              It's yours.
+            </p>
+            <p className="text-xs mb-8 break-all" style={{ color: "var(--text-muted)" }}>
+              {mintResult.mintAddress}
+            </p>
+            <div className="flex gap-4 justify-center">
+              <a
+                href={`https://explorer.solana.com/address/${mintResult.mintAddress}?cluster=devnet`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-lg text-sm font-semibold"
+                style={{ backgroundColor: "var(--gold)", color: "var(--bg-deep)" }}
+              >
+                View on Explorer
+              </a>
+              <button
+                onClick={() => setShowFullScreenMint(false)}
+                className="px-6 py-3 rounded-lg text-sm font-semibold border"
+                style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {mintResult && (
         <div
           className="fixed bottom-6 right-6 rounded-xl border p-4 max-w-sm"
