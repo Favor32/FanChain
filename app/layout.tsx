@@ -33,9 +33,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
   <WalletProvider>
     <nav
-      className="flex items-center justify-between px-6 py-4 "
-      style={{ borderColor: "var(--border)" }}
-    >
+  className="flex flex-wrap items-center justify-between gap-4 px-6 py-4"
+>
       
       <a href="/"
         className="text-xl tracking-widest"
@@ -43,7 +42,7 @@ export default function RootLayout({
       >
         FANCHAIN
       </a>
-      <div className="flex gap-8 text-base" style={{ color: "var(--text-primary)" }}>
+      <div className="flex flex-wrap gap-4 sm:gap-8 text-sm sm:text-base" style={{ color: "var(--text-primary)" }}>
   <a href="/" className="hover:underline">Home</a>
   <a href="/live" className="hover:underline">Live Room</a>
   <a href="/how-it-works" className="hover:underline">How It Works</a>
