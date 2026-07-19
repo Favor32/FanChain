@@ -204,7 +204,14 @@ useEffect(() => {
             redcard: "/moments/redcard.svg",
             yellowcard: "/moments/yellowcard.svg",
           };
-          const imageSrc = imageMap[event.momentType] || "/moments/generic.svg";
+         const teamName =
+  fixture && event.participant1Id === fixture.Participant1Id
+    ? fixture.Participant1
+    : fixture && event.participant1Id === fixture.Participant2Id
+    ? fixture.Participant2
+    : "Team";
+const minute = event.dataSoccer?.Minutes || 0;
+const imageSrc = `/api/moment-image?type=${event.momentType}&team=${encodeURIComponent(teamName)}&minute=${minute}`;
 
          return (
             <div

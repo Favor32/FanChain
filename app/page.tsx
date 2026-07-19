@@ -61,11 +61,11 @@ export default function Home() {
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { img: "/moments/goal.svg", label: "Goal" },
-            { img: "/moments/redcard.svg", label: "Red Card" },
-            { img: "/moments/yellowcard.svg", label: "Yellow Card" },
-            { img: "/moments/generic.svg", label: "Moment" },
-          ].map((item) => (
+  { img: "/api/moment-image?type=goal&team=Argentina&minute=34", label: "Goal" },
+  { img: "/api/moment-image?type=redcard&team=France&minute=61", label: "Red Card" },
+  { img: "/api/moment-image?type=yellowcard&team=Spain&minute=22", label: "Yellow Card" },
+  { img: "/api/moment-image?type=generic&team=England&minute=78", label: "Moment" },
+].map((item) => (
             <div
               key={item.label}
               className="rounded-xl overflow-hidden border"
